@@ -102,35 +102,6 @@ src/
 ---
 
 
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js v18+
-- MongoDB (local or Atlas)
-
-### Installation
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/Nada7344/Saraha_App.git
-cd Saraha_App
-
-# 2. Install dependencies
-npm install
-
-# 3. Set up environment variables
-cp .env.example .env
-# Fill in your values in .env
-
-# 4. Start the server
-npm run dev
-```
-
-Server runs on `http://localhost:3000`
-
----
-
 ## 🔒 Security Practices
 
 - Passwords hashed with **Bcrypt**
