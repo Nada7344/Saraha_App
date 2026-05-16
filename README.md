@@ -101,37 +101,7 @@ src/
 
 ---
 
-## ⚙️ Environment Variables
 
-Create a `.env` file in the root directory:
-
-```env
-# Server
-PORT=3000
-NODE_ENV=development
-
-# Database
-DB_URI=mongodb://localhost:27017/saraha
-
-# JWT
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRES_IN=1d
-REFRESH_TOKEN_SECRET=your_refresh_secret
-REFRESH_TOKEN_EXPIRES_IN=7d
-
-# Google OAuth2
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Email (Nodemailer)
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_email_app_password
-
-# Bcrypt
-SALT_ROUNDS=10
-```
-
----
 
 ## 🚀 Getting Started
 
