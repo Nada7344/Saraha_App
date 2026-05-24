@@ -25,3 +25,32 @@ export const signup = {
       lang: joi.string().valid("ar", "en").required(),
     }).required()
 };
+
+
+
+export const resendConfirmEmail= {
+  
+      body: joi.object().keys({
+       email: generalValidationFields.email.required()
+      }).required(),
+ 
+};
+
+
+export const confirmEmail= {
+  
+      body: resendConfirmEmail.body.append().keys({
+       otp:generalValidationFields.otp.required()
+      }).required(),
+ 
+};
+
+export const resetForgotPassword= {
+  
+      body: confirmEmail.body.append().keys({
+      password: generalValidationFields.password.required(),
+       confirmPassword: generalValidationFields.confirmPassword("password").required(),
+
+      }).required(),
+ 
+};

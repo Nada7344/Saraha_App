@@ -84,7 +84,7 @@ export const paginate = async ({
 
 export const create = async ({
   data =[{}],
-  options = {validateBeforSave:true},
+  options = {validateBeforeSave:true},
   model
 
 }={}) => {

@@ -6,6 +6,7 @@ import {
   profileImage,
   rotateToken,
   shareProfile,
+  updatePassword,
 } from "./user.service.js";
 import {
   fileFeieldValidation,
@@ -28,8 +29,8 @@ router.post(
   "/logout",
   authentecation(),
   async (req, res, next) => {
-    const result = await logout(req.user);
-    return successResponse({ res, data: {result } });
+    const status = await logout(req.body,req.user ,req.decoded);
+    return successResponse({ res,status });
   },
 );
 
@@ -51,6 +52,16 @@ router.get(
   async (req, res, next) => {
     const account = await shareProfile(req.params.userId);
     return successResponse({ res, data: { account } });
+  },
+);
+
+router.patch(
+  "/update-password",
+  authentecation(),
+  validation(validators.updatePassword),
+  async (req, res, next) => {
+    const credentials = await updatePassword(req.body,req.user , `${req.protocol}//${req.host}`)
+    return successResponse({ res, data: {...credentials } });
   },
 );
 
@@ -87,11 +98,12 @@ router.get(
   authentecation(TokenTypeEnum.Referesh),
   async (req, res, next) => {
     const credentials = await rotateToken(
-      req.user,
+      req.user,req.decoded,
       `${req.protocol}//${req.host}`,
     );
-    return successResponse({ res, data: { credentials } });
+    return successResponse({ res,status:201,data: { ...credentials } });
   },
 );
 
 export default router;
+ 

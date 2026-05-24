@@ -9,7 +9,9 @@ return async (req ,res ,next)=>{
    if(!schema || !credentials){
          throw UnauthorizedException({message:"missing authentication key or invalid approach "})
    } 
-    req.user = await decodeToken({token:credentials ,tokenType});
+ const {user ,decoded}= await decodeToken({token:credentials ,tokenType});
+      req.user =user;
+      req.decoded=decoded;
    next();
    }
  }

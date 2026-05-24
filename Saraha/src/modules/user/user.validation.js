@@ -7,6 +7,17 @@ export const shareProfile={
         userId :generalValidationFields.id.required()
     }).required()
 }
+
+
+export const updatePassword = {
+  body:joi.object().keys({
+    oldPassword:generalValidationFields.password.required(),
+    password:generalValidationFields.password.not(joi.ref("oldPassword")).required(),
+    confirmPassword:generalValidationFields.confirmPassword("password").required()
+  }).required()
+};
+
+
 export const profileImage = {
   file: generalValidationFields.file(fileFeieldValidation.image).required(),
 };

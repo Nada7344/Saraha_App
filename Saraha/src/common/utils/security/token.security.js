@@ -7,14 +7,18 @@ import {
   USER_ACCESS_TOKEN_SECRET_KEY,
   USER_REFRESH_TOKEN_SECRET_KEY,
 } from "../../../../config/config.service.js";
-import { UserModel, findOne } from "../../../DB/index.js";
+import { TokenModel, UserModel, findOne } from "../../../DB/index.js";
 import { TokenTypeEnum } from "../../enums/security.enum.js";
 import {
   BadRequestException,
   ConflictException,
   NotFoundException,
+  UnauthorizedException,
 } from "../response/error.response.js";
 import { RoleEnum } from "../../enums/user.enum.js";
+import {randomUUID} from 'node:crypto'
+import { get, revokeTokenKey } from "../../services/redis.service.js";
+
 
 export const generateToken = async ({
   paylaod = {},
@@ -86,6 +90,13 @@ export const decodeToken = async ({
       message: `Unexpected token mechanism we expected ${tokenType} while you have used ${TokenAprproach}`,
     });
   }
+
+  if(decoded.jti && await get({key :revokeTokenKey({userId:decoded.sub ,jti:decoded.jti})})){
+        throw UnauthorizedException({ message: "invalid login session" });
+
+  }
+
+
   const secret = await getTokenSignature({ tokenType: TokenAprproach, level });
   const verifyedData = jwt.verify(token, secret);
   const user = await findOne({
@@ -98,18 +109,17 @@ export const decodeToken = async ({
   }
 
    if (user.changeCredentialTime && user.changeCredentialTime?.getTime()>= decoded.iat *1000) {
-    throw NotFoundException({ message: "invalid login session" });
+    throw UnauthorizedException({ message: "invalid login session" });
   }
-  console.log( (user.changeCredentialTime && user.changeCredentialTime?.getTime()>= decoded.iat *1000) );
   
-  return user;
+  return{user ,decoded};
 };
 
 export const createLoginCredentials = async (user, issuer) => {
   const { accessSignature, refreshSignature } = await detectSignatureLevel(
     user.role,
   );
-
+  const jwtid =randomUUID()
   const access_token = await generateToken({
     paylaod: { sub: user._id },
     secret: accessSignature,
@@ -117,6 +127,7 @@ export const createLoginCredentials = async (user, issuer) => {
       issuer: issuer,
       audience: [TokenTypeEnum.Access, user.role],
       expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+      jwtid
     },
   });
 
@@ -128,6 +139,7 @@ export const createLoginCredentials = async (user, issuer) => {
       issuer: issuer,
       audience: [TokenTypeEnum.Referesh, user.role],
       expiresIn: REFRESH_TOKEN_EXPIRES_IN,
+      jwtid
     },
   });
   return { access_token, refresh_token };

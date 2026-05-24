@@ -21,6 +21,7 @@ export const generalValidationFields = {
   confirmPassword: function (path = "password") {
     return joi.string().valid(joi.ref(path));
   },
+  otp:joi.string().pattern(new RegExp(/^\d{6}$/)), 
 
   id:joi.string().custom((value,helper)=>{
     return Types.ObjectId.isValid(value)?true :helper.message("Invalid objectId");

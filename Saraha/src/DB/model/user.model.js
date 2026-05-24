@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
       default: ProviderEnum.System
     },
     role:{
-type: Number,
+    type: Number,
       enum: Object.values(RoleEnum),
 
       default: RoleEnum.User

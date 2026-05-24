@@ -14,7 +14,7 @@ config({ path: resolve(`./config/${envPath[NODE_ENV]}`) })
 
 
 export const port = process.env.PORT ?? 7000
-
+export const APPLICATION_NAME= process.env.APPLICATION_NAME
 export const DB_URI = process.env.DB_URI 
 
 
@@ -28,4 +28,6 @@ export const SYSTEM_ACCESS_TOKEN_SECRET_KEY = process.env.SYSTEM_ACCESS_TOKEN_SE
 export const SYSTEM_REFRESH_TOKEN_SECRET_KEY =process.env.SYSTEM_REFRESH_TOKEN_SECRET_KEY
 export const ACCESS_TOKEN_EXPIRES_IN = parseInt(process.env.ACCESS_TOKEN_EXPIRES_IN)
 export const REFRESH_TOKEN_EXPIRES_IN =parseInt(process.env.REFRESH_TOKEN_EXPIRES_IN)
-
+export const REDIS_URI = process.env.REDIS_URI
+export const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD
+export const EMAIL = process.env.EMAIL
